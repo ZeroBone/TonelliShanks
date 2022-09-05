@@ -40,14 +40,15 @@ def _choose_b(p: int, /, *, det=True) -> int:
     return b
 
 
-def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, /):
+def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /):
     """
     Computes a square root of a modulo prime p
     :param a: the number to take the square root of
     :param k: positive integer, such that a^m = 1 (mod p) where m = (p-1)/(2^k)
     :param p: odd prime p modulo which we are working
     :param b: an arbitrary non-square modulo p
-    :return: one of the square roots of a modulo p (the other one is the negation)
+    :param b_inverse: the inverse of b modulo p, i.e., b * b_inverse = 1 (mod p)
+    :return: one of the square roots of a modulo p (the other can be obtained via negation modulo p)
     """
 
     assert p > 2
@@ -102,11 +103,11 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, /):
 
         assert power_modulo(a_next, m, p) == 1
 
-        a_next_root = _tonelli_shanks_recursive(a_next, k + k_delta, p, b)
+        a_next_root = _tonelli_shanks_recursive(a_next, k + k_delta, p, b, b_inverse)
 
         _logger.info("Backward propagation: root of %d is %d" % (a_next, a_next_root))
 
-        a_root = a_next_root * inverse_modulo(power_modulo(b, b_power_half, p), p)
+        a_root = a_next_root * power_modulo(b_inverse, b_power_half, p)
 
         return a_root % p
 
@@ -119,6 +120,13 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, /):
 
 
 def tonelli_shanks(a: int, p: int, /, *, deterministic=True) -> int | None:
+    """
+    Computes a square root of a modulo prime p
+    :param a: the number to take the square root of
+    :param p: odd prime p modulo which we are working
+    :param deterministic: whether to search for the non-square b deterministically
+    :return: one of the square roots of a modulo p (the other can be obtained via negation modulo p)
+    """
 
     assert p > 2
     assert 0 < a < p
@@ -131,7 +139,9 @@ def tonelli_shanks(a: int, p: int, /, *, deterministic=True) -> int | None:
 
     b = _choose_b(p, det=deterministic)
 
-    return _tonelli_shanks_recursive(a, 1, p, b)
+    b_inverse = inverse_modulo(b, p)
+
+    return _tonelli_shanks_recursive(a, 1, p, b, b_inverse)
 
 
 def _main():

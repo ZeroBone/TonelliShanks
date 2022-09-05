@@ -50,9 +50,6 @@ class TonelliShanksTests(unittest.TestCase):
     def test_4(self):
         self.simple_test(13, 10000019)
 
-    def test_5(self):
-        self.simple_test(17, (1 << 19937) - 1)
-
     def interval_test(self, p_low: int, p_high: int, /, *, det: bool):
 
         assert p_low < p_high
@@ -103,3 +100,6 @@ class TonelliShanksTests(unittest.TestCase):
 
     def test_until_10000(self):
         self.interval_test_full(9000, 10000)
+
+    def test_mersenne(self):
+        self.simple_test(17, (1 << 19937) - 1)
