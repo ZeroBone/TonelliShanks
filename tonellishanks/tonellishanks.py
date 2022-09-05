@@ -158,7 +158,7 @@ def _main():
         _logger.error("Invalid input: recheck the a and p values you entered.")
         return
 
-    if not is_prime(p):
+    if "--no-prime-test" not in sys.argv[1:] and not is_prime(p):
         _logger.error("p = %d is not a prime number", p)
         return
 

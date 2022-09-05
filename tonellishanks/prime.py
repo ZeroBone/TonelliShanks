@@ -1,3 +1,9 @@
+import random
+
+from euklidian import gcd
+from powmod import power_modulo
+
+
 def is_prime(n: int) -> bool:
     if n <= 1:
         return False
@@ -7,6 +13,16 @@ def is_prime(n: int) -> bool:
 
     if n % 2 == 0 or n % 3 == 0:
         return False
+
+    # Fermat test
+    for _ in range(n.bit_length() * 4):
+        a = random.randrange(2, n)
+
+        if gcd(a, n) != 1:
+            return False
+
+        if power_modulo(a, n - 1, n) != 1:
+            return False
 
     i = 5
     while i * i <= n:
