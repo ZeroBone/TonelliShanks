@@ -34,6 +34,7 @@ class TonelliShanksTests(unittest.TestCase):
         self.assertEqual(a, alleged_square, msg="a = %d, p = %d" % (a, p))
 
     def simple_test(self, a: int, p: int, /, *, det: bool = True):
+        _logger.info("========== Starting test [a = %d, p = %d] ==========", a, p)
         root = tonelli_shanks(a, p, deterministic=det)
         self.check_square(a, root, p)
 
@@ -41,7 +42,16 @@ class TonelliShanksTests(unittest.TestCase):
         self.simple_test(8, 17)
 
     def test_2(self):
+        self.simple_test(9, 17)
+
+    def test_3(self):
         self.simple_test(39, 41)
+
+    def test_4(self):
+        self.simple_test(13, 10000019)
+
+    def test_5(self):
+        self.simple_test(17, (1 << 19937) - 1)
 
     def interval_test(self, p_low: int, p_high: int, /, *, det: bool):
 
