@@ -101,5 +101,18 @@ class TonelliShanksTests(unittest.TestCase):
     def test_until_10000(self):
         self.interval_test_full(9000, 10000)
 
-    def test_mersenne(self):
-        self.simple_test(17, (1 << 19937) - 1)
+    def mersenne_test(self, /, *, det: bool):
+        mersenne_prime = (1 << 607) - 1
+
+        for _ in range(0x100):
+            a = random.randrange(2, mersenne_prime)
+
+            a = a * a % mersenne_prime
+
+            self.simple_test(a, mersenne_prime, det=det)
+
+    def test_mersenne_deterministic(self):
+        self.mersenne_test(det=True)
+
+    def test_mersenne_randomized(self):
+        self.mersenne_test(det=False)
