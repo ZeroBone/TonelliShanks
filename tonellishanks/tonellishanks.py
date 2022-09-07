@@ -57,13 +57,15 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /)
 
     m = (p - 1) >> k
 
-    a_m = power_modulo(a, m, p)
-
     # assumption
-    assert a_m == 1
+    assert power_modulo(a, m, p) == 1
+
+    a_m = 1
 
     # check that b is indeed a non-square modulo p
     assert legendre_symbol(b, p) == p - 1
+
+    _logger.info("[ROUND]: a = %d, m = %d, a^m = 1 (mod n)", a, m)
 
     k_delta = 0
 
@@ -76,6 +78,12 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /)
 
         a_m = power_modulo(a, m, p)
 
+        _logger.info(
+            "m is even and a^m = 1 (mod n) => we divide m by 2 and get: m = %d, a^m = %s (mod n)",
+            m,
+            "1" if a_m == 1 else "-1"
+        )
+
         if a_m == p - 1:
             # a^m = -1 (mod p)
             break
@@ -87,6 +95,9 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /)
 
     if a_m == p - 1:
         # a^m = -1 (mod p)
+
+        _logger.info("m = %d, a^m = -1 (mod n) => we multiply a^m with a legendre symbol of a non-square b modulo p", m)
+
         assert k_delta >= 1
         assert k + k_delta >= 2
 
@@ -98,7 +109,6 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /)
 
         a_next = (a * power_modulo(b, b_power, p)) % p
 
-        _logger.info("m = %d, a = %d, b = %d", m, a, b)
         _logger.debug("(a * b^%d)^m = (a * b^%d)^%d = %d^%d = 1", b_power, b_power, m, a_next, m)
 
         assert power_modulo(a_next, m, p) == 1
