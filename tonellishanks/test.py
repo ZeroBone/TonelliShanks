@@ -116,3 +116,7 @@ class TonelliShanksTests(unittest.TestCase):
 
     def test_mersenne_randomized(self):
         self.mersenne_test(det=False)
+
+
+if __name__ == "__main__":
+    unittest.main()

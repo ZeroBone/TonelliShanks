@@ -37,7 +37,53 @@ where the `deterministic` argument should be set to true iff the algorithm is to
 
 **Important**: the caller of this function must guarantee that $p$ is an odd prime and that $1 \le a \le p-1$.
 
-#### Copyright
+### Tests
+
+This project is thoroughly tested using unit tests together with a lot of regular assertions verifying that the invariants are maintained throughout the execution. Unit tests can be run via the
+
+```bash
+python tonellishanks/test.py
+```
+
+command.
+
+### Example
+
+If executed from the CLI, this tool also produces a detailed log of how the square root was computed. This may be useful for educational purposes. For example, running the tool to compute the square roots of $a=8$ modulo $p=17$ produces:
+
+```
+Mode: deterministic
+======== [Starting algorithm with a = 8, p = 17] ========
+Found b = 3 after 2 attempts
+-------- [New round] --------
+a = 8, m = 8, a^m = 1
+m is even and a^m = 1 => we divide m by 2 and get: m = 4, a^m = -1
+m = 4, a^m = -1 => we multiply a^m with a legendre symbol of a non-square b modulo p
+(a * b^2)^m = (a * b^2)^4 = 4^4 = 1
+It follows that a_next := a * b^2 = 8 * 9 = 4 is a square whose root yields a root of a
+-------- [New round] --------
+a = 4, m = 4, a^m = 1
+m is even and a^m = 1 => we divide m by 2 and get: m = 2, a^m = -1
+m = 2, a^m = -1 => we multiply a^m with a legendre symbol of a non-square b modulo p
+(a * b^4)^m = (a * b^4)^2 = 1^2 = 1
+It follows that a_next := a * b^4 = 4 * 13 = 1 is a square whose root yields a root of a
+-------- [New round] --------
+a = 1, m = 2, a^m = 1
+m is even and a^m = 1 => we divide m by 2 and get: m = 1, a^m = 1
+-------- [Round complete] --------
+The root of a_next = 1 is 1
+sqrt(a_next)^2 = 1^2 = a_next = a * b^4 = sqrt(a)^2 * b^4
+=> sqrt(a = 4) = sqrt(a_next) * b^(-2) = 1 * 2 = 2
+-------- [Round complete] --------
+The root of a_next = 4 is 2
+sqrt(a_next)^2 = 2^2 = a_next = a * b^2 = sqrt(a)^2 * b^2
+=> sqrt(a = 8) = sqrt(a_next) * b^(-1) = 2 * 6 = 12
+-------- [Round complete] --------
+======== [Result] ========
+The square roots of 8 are: 5, 12
+```
+
+## Copyright
 
 Copyright (c) 2022 Alexander Mayorov.
 
