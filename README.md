@@ -6,7 +6,7 @@ $$
 b^2 \equiv a \mod p
 $$
 
-The Tonelli-Shanks algorithm may need to compute a non-square modulo $p$ in order to correctly handle the case when $a^m \equiv -1 \mod p$ for some $m$ dividing $(p-1)/2$. In that case, two modes are implemented: *deterministic* and *randomized*. In the deterministic mode, as the name suggests, the algorithm is completely deterministic and computes the non-square modulo $p$ by simply trying out all values between $2$ and $p-1$ and testing whether the current value is a non-square using [Euler's criterion](https://en.wikipedia.org/wiki/Euler%27s_criterion). In the randomized mode, the same is done but a preudo-random number generator is used to search for the non-square. Since exactly half of the elements of $(\mathbb{Z}/p\mathbb{Z})^{\star}$ are squares and the other half are non-squares, it follows that 2 is the expected number of iterations needed to find the non-square modulo $p$. This implies that the expected time complexity of the algorithm is $O(\log(p)^2)$.
+The Tonelli-Shanks algorithm may need to compute a non-square modulo $p$ in order to correctly handle the case when $a^m \equiv -1 \mod p$ for some $m$ dividing $(p-1)/2$. In that case, two modes are implemented: *deterministic* and *randomized*. In the deterministic mode, as the name suggests, the algorithm is completely deterministic and computes the non-square modulo $p$ by simply trying out all values between $2$ and $p-1$ and testing whether the current value is a non-square using [Euler's criterion](https://en.wikipedia.org/wiki/Euler%27s_criterion). In the randomized mode, the same is done more efficiently by using a preudo-random number generator to search for the non-square. Since exactly half of the elements of $(\mathbb{Z}/p\mathbb{Z})^{\star}$ are squares and the other half are non-squares, it follows that 2 is the expected number of iterations needed to find the non-square modulo $p$. This implies that the expected time complexity of the entire algorithm is $O(\log(p)^2)$ (in the randomized mode).
 
 ## Installation
 
@@ -35,7 +35,7 @@ def tonelli_shanks(a: int, p: int, /, *, deterministic=True) -> int | None
 
 where the `deterministic` argument should be set to true iff the algorithm is to be run in deterministic mode.
 
-**Important**: the caller of this function must guarantee that $p$ is an odd prime and that $0<a<p$.
+**Important**: the caller of this function must guarantee that $p$ is an odd prime and that $1 \le a \le p-1$.
 
 #### Copyright
 
