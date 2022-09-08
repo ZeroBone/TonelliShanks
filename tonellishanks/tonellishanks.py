@@ -130,7 +130,7 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /)
 
         _logger.info("sqrt(a_next)^2 = %d^2 = a_next = a * b^%d = sqrt(a)^2 * b^%d", a_next_root, b_power, b_power)
         _logger.info(
-            "=> sqrt(a = %d) = sqrt(a_next) * b^(-%d) = %d * %d = %d)",
+            "=> sqrt(a = %d) = sqrt(a_next) * b^(-%d) = %d * %d = %d",
             a,
             b_power_half,
             a_next_root,
@@ -138,10 +138,14 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /)
             a_root
         )
 
+        _logger.info("-------- [Round complete] --------")
+
         return a_root % p
 
     assert a_m == 1
     assert m % 2 == 1
+
+    _logger.info("-------- [Round complete] --------")
 
     # we now handle the case when m is odd
     # this case is easy, a^((m+1)/2) is a square root of a
