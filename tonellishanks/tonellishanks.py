@@ -69,14 +69,12 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /)
     _logger.info("-------- [New round] --------")
     _logger.info("a = %d, m = %d, a^m = 1", a, m)
 
-    k_delta = 0
-
     while m % 2 == 0:
 
         m >>= 1
-        k_delta += 1
+        k += 1
 
-        assert m == (p - 1) >> k + k_delta
+        assert m == (p - 1) >> k
 
         a_m = power_modulo(a, m, p)
 
@@ -100,11 +98,10 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /)
 
         _logger.info("m = %d, a^m = -1 => we multiply a^m with a legendre symbol of a non-square b modulo p", m)
 
-        assert k_delta >= 1
-        assert k + k_delta >= 2
+        assert k >= 2
 
-        b_power = 1 << (k + k_delta - 1)
-        b_power_half = 1 << (k + k_delta - 2)
+        b_power = 1 << (k - 1)
+        b_power_half = 1 << (k - 2)
 
         assert power_modulo(a, m, p) == p - 1
         assert b_power * m == (p - 1) >> 1
@@ -122,7 +119,7 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /)
 
         assert power_modulo(a_next, m, p) == 1
 
-        a_next_root = _tonelli_shanks_recursive(a_next, k + k_delta, p, b, b_inverse)
+        a_next_root = _tonelli_shanks_recursive(a_next, k, p, b, b_inverse)
 
         _logger.info("The root of a_next = %d is %d", a_next, a_next_root)
 
