@@ -69,7 +69,7 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /)
     _logger.info("-------- [New round] --------")
     _logger.info("a = %d, m = %d, a^m = 1", a, m)
 
-    while m % 2 == 0:
+    while m % 2 == 0 and a_m == 1:
 
         m >>= 1
         k += 1
@@ -84,14 +84,10 @@ def _tonelli_shanks_recursive(a: int, k: int, p: int, b: int, b_inverse: int, /)
             "1" if a_m == 1 else "-1"
         )
 
-        if a_m == p - 1:
-            # a^m = -1 (mod p)
-            break
-
         # since Z/pZ is a field, there cannot be any roots for 1 apart from 1 and -1
-        # the case -1 was already handled above
-        assert a_m == 1
-        # we simply continue dividing
+        assert a_m == 1 or a_m == p - 1
+
+    assert a_m == 1 or a_m == p - 1
 
     if a_m == p - 1:
         # a^m = -1 (mod p)
